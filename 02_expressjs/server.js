@@ -63,23 +63,27 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
+// problem: 
+//   if id is not Number() it gives error becuase find cant properly find it becuase 
+//   req.params.id is not int which is dumb but ok
+//solution
+  // /make it number
+
+  const id= Number(req.params.id);
+  const car = cars.find((car) => car.id === id); // the porblem is in here
   const { make, model, year, price } = req.body;
 
-  if (!make || !model || !year || !price)
-    return res.status(400).json({ error: "missing fields" });
+    if (!make || !model || !year || !price)return res.status(400).json({ error: "Make missing fields" });
 
-  const car = cars.find((car) => car.id === id);
-
-  const newCar = {
-    id: cars.length + 1,
+  const updatedCar = {
     make,
     model,
     year,
     price,
   };
 
-  cars.push(newCar);
-  res.status(201).json(newCar);
+  Object.assign(car,updatedCar)
+  res.status(200).json(updatedCar);
 });
 
 router.delete("/:id", (req, res) => {
@@ -97,7 +101,7 @@ router.delete("/:id", (req, res) => {
   // am pretty busy
   cars = car;
 
-  res.status(204).json({message:'successfully deleted'});
+  res.status(204).json({ message: "successfully deleted" });
 });
 
 app.use("/api/v1/cars", router); //this is broken btw
