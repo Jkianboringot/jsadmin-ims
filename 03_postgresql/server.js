@@ -1,5 +1,7 @@
 import express from "express";
-
+import { db } from "./db.js";
+import { cars } from "./schema.js";
+import { eq } from "drizzle-orm";
 const app = express();
 const PORT = 3000;
 
@@ -7,27 +9,18 @@ const router = express.Router();
 
 app.use(express.json());
 
-let cars = [
-  { id: 1, make: "Toyota", model: "Camry", year: 2022, price: 28000 },
-  { id: 2, make: "Tesla", model: "Model S", year: 2023, price: 25000 },
-  { id: 3, make: "Ford", model: "F-150", year: 2021, price: 35000 },
-];
-
 app.use((req, res, next) => {
   const timestamp = new Date().toISOString();
   console.log(`[${timestamp}] ${req.method} ${req.url}`);
   next();
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello from Car API!");
+router.get("/cars", async (req, res) => {
+  const allCars = await db.select().from(cars).returning();
+  res.json(allCars);
 });
 
-router.get("/cars", (req, res) => {
-  res.json(cars);
-});
-
-router.post("/cars", (req, res) => {
+router.post("/cars", async (req, res) => {
   const { make, model, year, price } = req.body;
 
   if (!make || !model || !year || !price) {
@@ -36,64 +29,60 @@ router.post("/cars", (req, res) => {
     });
   }
 
-  const nextId = cars.length + 1;
-
-  const newCar = {
-    id: nextId,
-    make,
-    model,
-    year: parseInt(year),
-    price: parseFloat(price),
-  };
-
-  cars.push(newCar);
+  const [newCar] = await db
+    .insert(cars)
+    .values({ make, model, year, price })
+    .returning();
 
   res.status(201).json(newCar);
 });
 
-router.put("/cars/:id", (req, res) => {
-  const carId = parseInt(req.params.id);
-  const carIndex = cars.findIndex((c) => c.id === carId);
+router.put("/cars/:id", async (req, res) => {
+  const { make, model, year, price } = req.body;
+  const id = Number(req.params.id);
 
-  if (carIndex === -1) {
-    return res.status(404).json({ error: "Car not found" });
+  if (!make || !model || !year || !price) {
+    return res.status(400).json({
+      error: "Please provide make, model, year, and price",
+    });
   }
 
-  const { make, model, year, price } = req.body;
+  const updatedCar = await db
+    .update(cars)
+    .set({ make, model, year, price })
+    .where(eq(cars.id, 1))
+    .returning();
 
-  if (make) cars[carIndex].make = make;
-  if (model) cars[carIndex].model = model;
-  if (year) cars[carIndex].year = parseInt(year);
-  if (price) cars[carIndex].price = parseFloat(price);
-
-  res.json(cars[carIndex]);
+  res.status(201).json(updatedCar);
 });
 
-router.delete("/cars/:id", (req, res) => {
-  const carId = parseInt(req.params.id);
-  const carIndex = cars.findIndex((c) => c.id === carId);
+router.delete("/cars/:id", async (req, res) => {
+  const id = Number(req.params.id);
 
-  if (carIndex === -1) {
+  const deleteCar=await db.delete(cars).where(eq(cars.id,id)).returning()
+
+  
+  if (!deleteCar) {
     return res.status(404).json({ error: "Car not found" });
   }
-
-  const deletedCar = cars.splice(carIndex, 1)[0];
-
   res.json({
     message: "Car deleted successfully",
-    car: deletedCar,
+    car: deleteCar,
   });
 });
 
-router.get("/cars/:id", (req, res) => {
+router.get("/cars/:id", async(req, res) => {
   const carId = parseInt(req.params.id);
-  const car = cars.find((c) => c.id === carId);
 
-  if (!car) {
+  const getCar = await db.select().from(cars).where(eq(cars.id,carId)).returning()
+  //its important to have that returning becuase that like next it pretty much pass the data
+  // to the next thing that wants it if you did not put that the data will not be pass to the
+  // next thing that wants it
+  if (!getCar) {
     return res.status(404).json({ error: "Car not found" });
   }
 
-  res.json(car);
+  res.json(getCar);
 });
 
 app.use("/api/v1", router);
