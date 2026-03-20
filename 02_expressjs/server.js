@@ -10,10 +10,30 @@ app.use(express.json()); //parser, is using to read and understand what is sent 
 
 const router = express.Router();
 
+
+// middleware
+// it is  important  for middle ware to have next becuase that is what will allow
+// use to check in between request and still move forward
+app.use((req,res,next)=>{
+  const time =new Date().toISOString()
+  console.log(`[${time}] ${req.method} ${req.url}`)
+
+  //middle is pretty much use to check something in between request think of it as 
+  // the guard in the gate of school outside, gate(guard), inside school, it jobs is 
+  // to check if student have id or not carring illegal shit
+  next() //this is just the guard allowing passage
+
+  // its wierd that this is how you make middle ware no shit, it like it force you to seperate it to 
+  // different file just to make this work like one file for cashier with this role middleware and
+  // admin middleware file for admin route 
+})
+
+
+
 let cars = [
   { id: 1, make: "toyota", model: "fuck", year: 1, price: 400 },
   { id: 2, make: "shit", model: "fuck", year: 1, price: 400 },
-  { id: 3, make: "fcuck", model: "fuck", year: 1, price: 400 },
+  { id: 3, make: "fcuck", model: "fuck", year: 1, price: 400 }, 
   { id: 4, make: "bitch", model: "fuck", year: 1, price: 400 },
   { id: 5, make: "hell", model: "fuck", year: 1, price: 400 },
 ];
