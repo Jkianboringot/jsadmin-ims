@@ -1,35 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import CarForm from "./CarForm.jsx";
 
 const Car = ({ id, make, model, year, price }) => {
+  const [showForm, setShowForm] = useState(false);
+
   const handleDelete = async (e) => {
     e.preventDefault();
-    
 
     try {
-      
-       await fetch(`/api/v1/cars/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(()=>alert('Delete car successfully'));
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleEdit = async () => {
-    try {
-      await fetch("/api/v1/cars", {
+      await fetch(`/api/v1/cars/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id }),
-      });
-
-      alert("Edit car successfully");
+      }).then(() => alert("Delete car successfully"));
     } catch (err) {
       console.log(err);
     }
@@ -44,9 +28,12 @@ const Car = ({ id, make, model, year, price }) => {
       <td>{price}</td>
 
       <td className="actions">
-        <button className="edit-btn" onClick={handleEdit}>
+        <div>
+        <button className="edit-btn" onClick={() => setShowForm(true)}>
           Edit
         </button>
+        {showForm && <CarForm method='PUT' id={id}/>}
+</div>
         <form action="" method="DELETE">
           <button className="delete-btn" onClick={handleDelete}>
             Delete

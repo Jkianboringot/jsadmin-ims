@@ -3,6 +3,7 @@ import { db } from "./db.js";
 import { cars } from "./schema.js";
 import { eq } from "drizzle-orm";
 import { numeric } from "drizzle-orm/pg-core";
+import { dateDuration } from "drizzle-orm/gel-core";
 const app = express();
 const PORT = 3000;
 
@@ -41,7 +42,7 @@ console.log(req.body)
 router.put("/cars/:id", async (req, res) => {
   const { make, model, year, price } = req.body;
   const id = Number(req.params.id);
-
+  console.log(id)
   if (!make || !model || !year || !price) {
     return res.status(400).json({
       error: "Please provide make, model, year, and price",

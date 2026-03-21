@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const CarForm = () => {
+const CarForm = ({ method = "POST", id = null }) => {
   useEffect(() => {
     const addCar = document.querySelector(".submit-btn");
 
@@ -17,8 +17,14 @@ const CarForm = () => {
       const y = year.value;
       const p = price.value;
 
-      fetch("/api/v1/cars", {
-        method: "POST",
+      let route = "/api/v1/cars/";
+
+      if (method === "PUT") {
+         route = `/api/v1/cars/${id}`;
+         console.log(route)
+      }   
+      fetch(route, {
+        method: method, //no teni since its check a value no true or false
         headers: {
           "Content-Type": "application/json",
         },

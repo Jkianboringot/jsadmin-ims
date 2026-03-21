@@ -28,7 +28,7 @@ const App = () => {
           + Add Car
         </button>
 
-        {showForm && <CarForm />}
+        {showForm && <CarForm method='POST'/>}
       </div>
 
       <table className="car-table">
