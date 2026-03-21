@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 });
 
 router.get("/cars", async (req, res) => {
-  const allCars = await db.select().from(cars).returning();
+  const allCars = await db.select().from(cars);
   res.json(allCars);
 });
 
@@ -50,7 +50,7 @@ router.put("/cars/:id", async (req, res) => {
   const updatedCar = await db
     .update(cars)
     .set({ make, model, year, price })
-    .where(eq(cars.id, 1))
+    .where(eq(cars.id, id))
     .returning();
 
   res.status(201).json(updatedCar);
@@ -74,7 +74,7 @@ router.delete("/cars/:id", async (req, res) => {
 router.get("/cars/:id", async(req, res) => {
   const carId = parseInt(req.params.id);
 
-  const getCar = await db.select().from(cars).where(eq(cars.id,carId)).returning()
+  const getCar = await db.select().from(cars).where(eq(cars.id,carId))
   //its important to have that returning becuase that like next it pretty much pass the data
   // to the next thing that wants it if you did not put that the data will not be pass to the
   // next thing that wants it
