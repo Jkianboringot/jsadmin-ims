@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Car from "./components/Car.jsx";
+import CarForm from "./components/CarForm.jsx";
+
 const App = () => {
+  // show data
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
@@ -9,21 +12,30 @@ const App = () => {
       .then((data) => setCars(data))
       .catch((err) => console.log(err));
   }, []);
-  console.log(cars);
 
-  // i kinda want to see fi you can use asyn in here
+  // show form
+  const [showForm, setShowForm] = useState(false);
+
+  // delete
+  
 
   return (
-        <div className="container">
+    <div className="container">
       <div className="header">
         <h1>Car List</h1>
 
-        <button className="add-btn">+ Add Car</button>
+        <button className="add-btn" onClick={() => setShowForm(true)}>
+          + Add Car
+        </button>
+
+        {showForm && <CarForm />}
       </div>
 
       <table className="car-table">
         <thead>
           <tr>
+            <th>ID</th>
+
             <th>Make</th>
             <th>Model</th>
             <th>Year</th>
@@ -40,7 +52,6 @@ const App = () => {
       </table>
     </div>
 
-    
     //     <div>
     //       <h1>welcome bitch its the car store</h1>
 

@@ -2,6 +2,7 @@ import express from "express";
 import { db } from "./db.js";
 import { cars } from "./schema.js";
 import { eq } from "drizzle-orm";
+import { numeric } from "drizzle-orm/pg-core";
 const app = express();
 const PORT = 3000;
 
@@ -22,7 +23,7 @@ router.get("/cars", async (req, res) => {
 
 router.post("/cars", async (req, res) => {
   const { make, model, year, price } = req.body;
-
+console.log(req.body)
   if (!make || !model || !year || !price) {
     return res.status(400).json({
       error: "Please provide make, model, year, and price",
@@ -33,7 +34,7 @@ router.post("/cars", async (req, res) => {
     .insert(cars)
     .values({ make, model, year, price })
     .returning();
-
+  
   res.status(201).json(newCar);
 });
 
@@ -58,7 +59,7 @@ router.put("/cars/:id", async (req, res) => {
 
 router.delete("/cars/:id", async (req, res) => {
   const id = Number(req.params.id);
-
+  console.log(id)
   const deleteCar=await db.delete(cars).where(eq(cars.id,id)).returning()
 
   
