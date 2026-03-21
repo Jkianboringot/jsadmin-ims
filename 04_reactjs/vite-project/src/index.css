@@ -22,7 +22,79 @@ h1{
 
 
 
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  padding: 20px;
+}
 
+/* container */
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* add button top right */
+.add-btn {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* table */
+.car-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.car-table th,
+.car-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.car-table th {
+  background: #111;
+  color: white;
+}
+
+/* actions */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn {
+  background: #facc15;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
 
 

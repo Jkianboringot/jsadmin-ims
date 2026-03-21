@@ -1,14 +1,19 @@
-import React from 'react'
+import React from "react";
 
-const Car = ({make,model,year,price}) =>{
+const Car = ({ make, model, year, price }) => {
   return (
-    <li>
-      <p>make:{make}</p>
-      <p>model:{model}</p>
-      <p>year:{year}</p>
-      <p>price:{price}</p>
-    </li>
-  )
-}
+     <tr>
+      <td>{make}</td>
+      <td>{model}</td>
+      <td>{year}</td>
+      <td>{price}</td>
 
-export default Car
+      <td className="actions">
+        <button className="edit-btn">Edit</button>
+        <button className="delete-btn">Delete</button>
+      </td>
+    </tr>
+  );
+};
+
+export default Car;

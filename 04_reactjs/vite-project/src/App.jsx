@@ -14,19 +14,46 @@ const App = () => {
   // i kinda want to see fi you can use asyn in here
 
   return (
-    <div>
-      <h1>welcome bitch its the car store</h1>
+        <div className="container">
+      <div className="header">
+        <h1>Car List</h1>
 
-      <ul>
-        {/* {cars.map((car) => { this is a callback am stupid
-          <Car key={car.id} {...car} />;
-        })} */}
+        <button className="add-btn">+ Add Car</button>
+      </div>
 
-        {cars.map((car) => (
-  <Car key={car.id} {...car} />
-))}
-      </ul>
+      <table className="car-table">
+        <thead>
+          <tr>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {cars.map((car) => (
+            <Car key={car.id} {...car} />
+          ))}
+        </tbody>
+      </table>
     </div>
+
+    
+    //     <div>
+    //       <h1>welcome bitch its the car store</h1>
+
+    //       <ul>
+    //         {/* {cars.map((car) => { this is a callback am stupid
+    //           <Car key={car.id} {...car} />;
+    //         })} */}
+
+    //         {cars.map((car) => (
+    //   <Car key={car.id} {...car} />
+    // ))}
+    //       </ul>
+    //     </div>
   );
 };
 
